@@ -46,12 +46,12 @@ void film::add_buyer(string _buyer)
 void film::change_film_rate(int _rate)
 {
     rates.push_back(_rate);
-    int sum=0;
+    float sum=0;
     for(int i=0;i<rates.size();i++)
     {
         sum+=rates[i];
     }
-    film_rate=sum/rates.size();
+    film_rate=sum/float(rates.size());
 }
 
 void film::add_comment(string content, string publisher){

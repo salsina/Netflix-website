@@ -122,16 +122,18 @@ void handle_input::delete_comment(int _comment_id,film* film)
    film->delete_comment(_comment_id);
 }
 
-void handle_input::reply_comment(int _comment_id,string _reply,film* film)
+void handle_input::reply_comment(int _comment_id,string _reply,film* film,int &done)
 {
     vector<comment*> c = film->return_comments();
     for(int i = 0; i < c.size(); i++){
         if(c[i]->return_id() == _comment_id && c[i]->return_film_id() == film->return_id()){
             c[i]->add_reply(_reply);
+            done=1;
             return;
         }
     }
     cout << "Not Found" << endl;
+    done=0;
 }
 
 string handle_input::return_commentor(int _comment_id, film* film)
@@ -249,9 +251,12 @@ void handle_input::get_films(film* f)
     }
     else
     {
-        for(int i = 0; i < 4; i++)
-            if(recom[i]->return_deleted_status()!="YES" && recom[i]->return_id()!=f->return_id())
-                cout << counter++ << ". " << recom[i]->return_id() << " | "<<recom[i]->return_name()<<" | "<<recom[i]->return_length()<<" | "<<recom[i]->return_director()<<endl;  
+        while(counter<5)
+        {
+            for(int i = 0; i < recom.size(); i++)
+                if(recom[i]->return_deleted_status()!="YES" && recom[i]->return_id()!=f->return_id())
+                    cout << counter++ << ". " << recom[i]->return_id() << " | "<<recom[i]->return_name()<<" | "<<recom[i]->return_length()<<" | "<<recom[i]->return_director()<<endl;  
+        }
     }
 }
 

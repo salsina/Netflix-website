@@ -349,7 +349,7 @@ void netflix::post_rate(map<string, string> info,handle_input* HandleInput)
 }
 
 void netflix::post_comments(map<string, string> info,handle_input* HandleInput)
-{    
+{        
     user *online = online_user(HandleInput);
     if(online == nullptr){
         cout << "Bad Request" << endl;
@@ -408,7 +408,10 @@ void netflix::post_replies(map<string, string> info,handle_input* HandleInput)
     string filmId = info.find("film_id")->second;
     film *f = HandleInput->find_film(filmId);
     publisher *p = online_publisher(HandleInput);
-    HandleInput->reply_comment(stoi(info.find("comment_id")->second),info.find("content")->second,f);
+    int done=0;
+    HandleInput->reply_comment(stoi(info.find("comment_id")->second),info.find("content")->second,f,done);
+    if(done==0)
+        return;
     string commentor = HandleInput->return_commentor(stoi(info.find("comment_id")->second), f);
     HandleInput->send_notification_to_a_user(HandleInput->find_user_id_by_username(commentor),"Publisher "+p->return_username() +" with id "+to_string(p->return_user_id()) +" reply to your comment");
 }
@@ -613,22 +616,24 @@ void netflix::post_commands()
 {
     if(line[1]=="signup")
         signup_command();
-    if(line[1]=="login")
+    else if(line[1]=="login")
         login_command();
-    if(line[1]=="films")
+    else if(line[1]=="films")
         post_film_command();
-    if(line[1]=="followers")
+    else if(line[1]=="followers")
         post_followers_command();
-    if(line[1]=="money")
+    else if(line[1]=="money")
         post_money_command();
-    if(line[1]=="buy")
+    else if(line[1]=="buy")
         post_buy_command();
-    if(line[1]=="rate")
+    else if(line[1]=="rate")
         post_rate_command();
-    if(line[1]=="comments")
+    else if(line[1]=="comments")
         post_comment_command();
-    if(line[1]=="replies")
+    else if(line[1]=="replies")
         post_reply_command();
+    else
+        cout<<"Not Found"<<endl;
 }
 
 void netflix::put_film_command()
@@ -719,20 +724,24 @@ void netflix::get_film_command()
         else 
             cout<<"Bad Request"<<endl;
     }
+    else
+        cout<<"Not Found"<<endl;
 }
 
 void netflix::get_commands()
 {
     if(line[1]=="notifications")
         get_notification_command();
-    if(line[1]=="followers")
+    else if(line[1]=="followers")
         get_followers_command();
-    if(line[1]=="published")
+    else if(line[1]=="published")
         get_published_command();
-    if(line[1]=="purchased")
+    else if(line[1]=="purchased")
         get_purchased_command();
-    if(line[1]=="films")
+    else if(line[1]=="films")
         get_film_command();
+    else
+        cout<<"Not Found"<<endl;    
 }
 
 
@@ -753,7 +762,7 @@ void netflix::run()
             else if(line[0]=="GET")
                 get_commands();
             else 
-                cout<<"Not Found"<<endl;
+                cout<<"Bad Request"<<endl;
         }
     }
 }

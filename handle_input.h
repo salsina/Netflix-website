@@ -27,7 +27,7 @@ public:
     void add_rate(string _film_id,int _rate,user* user,int &done);
     void add_comment(string _content,user* user,film* film,int &done);
     void delete_comment(int _comment_id,film* film);
-    void reply_comment(int _comment_id,string _reply,film* film);
+    void reply_comment(int _comment_id,string _reply,film* film,int &done);
     void search_info(vector<film*> &v_films_save,string info);
     void search_min_rate(vector<film*> &v_films_save,float rate);
     void search_min_year(vector<film*> &v_films_save,string min_year);
