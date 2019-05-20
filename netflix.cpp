@@ -523,17 +523,14 @@ void netflix::get_films(map<string, string> info,handle_input* HandleInput)
     HandleInput->get_films(f);    
 }
 
-void netflix::post_commands(){
-
-if(line[1]=="signup")
+void netflix::signup_command()
 {
     if (line.size()==12 || line.size()==14)
         signup(info,HandleInput);
     else
         cout<<"Bad Request"<<endl;
 }
-
-if(line[1]=="login")
+void netflix::login_command()
 {
     if(info.count("username")!=1 || info.count("password")!=1)
     {
@@ -546,7 +543,7 @@ if(line[1]=="login")
         cout<<"Bad Request"<<endl;
 }
 
-if(line[1]=="films")
+void netflix::post_film_command()
 {
     if(line.size()==16)
         post_films(info,HandleInput);
@@ -554,14 +551,15 @@ if(line[1]=="films")
         cout<<"Bad Request"<<endl;
 }
 
-if(line[1]=="followers")
+void netflix::post_followers_command()
 {
     if(line.size()==6)
         post_followers(info,HandleInput);
     else 
         cout<<"Bad Request"<<endl;
 }
-if(line[1]=="money")
+
+void netflix::post_money_command()
 {
     if(info.count("?")==1)
     {
@@ -578,28 +576,32 @@ if(line[1]=="money")
             cout<<"Bad Request"<<endl;
     }
 }
-if(line[1]=="buy")
-{
-    if(line.size()==6)
-        post_buy(info,HandleInput);
-    else 
-        cout<<"Bad Request"<<endl;
-}
-if(line[1]=="rate")
+
+void netflix::post_rate_command()
 {
     if(line.size()==8)
         post_rate(info,HandleInput);
     else 
         cout<<"Bad Request"<<endl;
 }
-if(line[1]=="comments")
+
+void netflix::post_buy_command()
+{
+    if(line.size()==6)
+        post_buy(info,HandleInput);
+    else 
+        cout<<"Bad Request"<<endl;
+}
+
+void netflix::post_comment_command()
 {
     if(line.size()==8)
         post_comments(info,HandleInput);
     else 
         cout<<"Bad Request"<<endl;
 }
-if(line[1]=="replies")
+
+void netflix::post_reply_command()
 {
     if(line.size()==10)
         post_replies(info,HandleInput);
@@ -607,10 +609,29 @@ if(line[1]=="replies")
         cout<<"Bad Request"<<endl;
 }
 
+void netflix::post_commands()
+{
+    if(line[1]=="signup")
+        signup_command();
+    if(line[1]=="login")
+        login_command();
+    if(line[1]=="films")
+        post_film_command();
+    if(line[1]=="followers")
+        post_followers_command();
+    if(line[1]=="money")
+        post_money_command();
+    if(line[1]=="buy")
+        post_buy_command();
+    if(line[1]=="rate")
+        post_rate_command();
+    if(line[1]=="comments")
+        post_comment_command();
+    if(line[1]=="replies")
+        post_reply_command();
 }
 
-void netflix::put_commands(){
-if(line[1]=="films")
+void netflix::put_film_command()
 {
     if(line.size()==6 ||line.size()==8 ||line.size()==10 ||line.size()==12 ||line.size()==14 ||line.size()==16)
         put_films(info,HandleInput);
@@ -618,10 +639,13 @@ if(line[1]=="films")
         cout<<"Bad Request"<<endl;
 }
 
+void netflix::put_commands()
+{
+    if(line[1]=="films")
+        put_film_command();
 }
 
-void netflix::delete_commands(){
-if(line[1]=="films")
+void netflix::delete_film_command()
 {
     if(line.size()==6)
         delete_films(info,HandleInput);
@@ -629,7 +653,7 @@ if(line[1]=="films")
         cout<<"Bad Request"<<endl;
 }
 
-if(line[1]=="comments")
+void netflix::delete_comment_command()
 {
     if(line.size()==8)
         delete_comments(info,HandleInput);
@@ -637,10 +661,15 @@ if(line[1]=="comments")
         cout<<"Bad Request"<<endl;
 }
 
+void netflix::delete_commands()
+{
+    if(line[1]=="films")
+        delete_film_command();
+    if(line[1]=="comments")
+        delete_comment_command();
 }
 
-void netflix::get_commands(){
-    if(line[1]=="notifications")
+void netflix::get_notification_command()
 {
     if(line.size()==3)
         get_notifications_user(HandleInput);
@@ -650,7 +679,7 @@ void netflix::get_commands(){
         cout<<"Bad Request"<<endl;
 }
 
-if(line[1]=="followers")
+void netflix::get_followers_command()
 {
     if(line.size()==3)
         get_followers(HandleInput);
@@ -658,7 +687,7 @@ if(line[1]=="followers")
         cout<<"Bad Request"<<endl;
 }
 
-if(line[1]=="published")
+void netflix::get_published_command()
 {
     if(line.size()==3 || line.size()==4 || line.size()==6||line.size()==8 ||line.size()==10||line.size()==12||line.size()==14||line.size()==16)
         get_published(info,HandleInput);
@@ -666,7 +695,7 @@ if(line[1]=="published")
         cout<<"Bad Request"<<endl;
 }
 
-if(line[1]=="purchased")
+void netflix::get_purchased_command()
 {
     if(line.size()==3 || line.size()==4 || line.size()==6||line.size()==8 ||line.size()==10||line.size()==12||line.size()==14||line.size()==16)
         get_purchased(info,HandleInput);
@@ -674,7 +703,7 @@ if(line[1]=="purchased")
         cout<<"Bad Request"<<endl;
 }
 
-if(line[1]=="films")
+void netflix::get_film_command()
 {
     if(info.count("film_id")==0)
     {
@@ -691,36 +720,40 @@ if(line[1]=="films")
             cout<<"Bad Request"<<endl;
     }
 }
+
+void netflix::get_commands()
+{
+    if(line[1]=="notifications")
+        get_notification_command();
+    if(line[1]=="followers")
+        get_followers_command();
+    if(line[1]=="published")
+        get_published_command();
+    if(line[1]=="purchased")
+        get_purchased_command();
+    if(line[1]=="films")
+        get_film_command();
 }
 
 
-void netflix::run(){
-
-while(getline(cin,str)) 
-{   
-    line=removeDupWord(str);
-    info=seperate_input(line);
-    if(str.size()!=0)
-    {
-        if(line[0]=="POST" )
+void netflix::run()
+{
+    while(getline(cin,str)) 
+    {   
+        line=removeDupWord(str);
+        info=seperate_input(line);
+        if(str.size()!=0)
         {
-            post_commands();
-        } 
-        else if(line[0]=="PUT")
-        {
-            put_commands();
+            if(line[0]=="POST" )
+                post_commands();
+            else if(line[0]=="PUT")
+                put_commands();
+            else if(line[0]=="DELETE")
+                delete_commands();
+            else if(line[0]=="GET")
+                get_commands();
+            else 
+                cout<<"Not Found"<<endl;
         }
-
-        else if(line[0]=="DELETE")
-        {
-            delete_commands();
-        }
-        else if(line[0]=="GET")
-        {    
-            get_commands();
-        }
-        else 
-            cout<<"Not Found"<<endl;
     }
-}
 }
