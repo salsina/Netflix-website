@@ -43,7 +43,6 @@ void user::add_money(int amount)
 void user::print_notifications_unread()
 {
     cout<<"#. Notification Message"<<endl;
-    //cout<<v_notifications.size()<<endl;
     for(int i=0;i<v_notifications.size();i++)
     {
         if(v_notifications[i]->return_publisher_name()==username)
@@ -64,3 +63,17 @@ void user::print_notifications_read(int _limit)
         }
     }
 }
+
+// void user::send_notification_to_a_user(string _notification)
+// {
+//     for(int i=0;i<v_notifications.size();i++)
+//     {
+//         if(v_notifications[i]->find_user_id(user_id)==user_id)
+//         {
+//             v_notifications[i]->add_notification_2(user_id,_notification);
+//             return;
+//         }
+//     }
+//     v_notifications.push_back(new notification(user_id,_notification));
+//     return;
+// }

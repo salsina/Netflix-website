@@ -17,7 +17,6 @@ public:
     void add_notification(string _notification);
     void send_notification_to_followers(string _notification);
     void add_follower(int _follower_id,string _follower_username,string _follower_email);
-    void send_notification_to_a_user(int _users_id,string _notification);
     void print_list_of_followers();
     void take_money();
     void add_money_to_publisher(film* film,string _film_id);

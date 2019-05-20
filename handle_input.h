@@ -34,8 +34,10 @@ public:
     void get_purchased(vector<film*> v_films_save,user* user);
     void get_films_filter(vector<film*> v_films_save);
     void get_films(film* film);
-
-    int find_user_id_by_username(string username){
+    void send_notification_to_a_user(int _user_id,string _notification);
+    user* find_user_by_user_id(int _user_id);
+    int find_user_id_by_username(string username)
+    {
         for(int i = 0; i < v_users.size(); i++){
             if(v_users[i]->return_username() == username)
                 return v_users[i]->return_user_id();

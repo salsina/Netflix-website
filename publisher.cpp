@@ -80,23 +80,6 @@ void publisher::send_notification_to_followers(string _notification)
     }
 }
 
-void publisher::send_notification_to_a_user(int _users_id,string _notification)
-{
-    for(int i=0;i<v_notifications.size();i++)
-    {
-        if(v_notifications[i]->find_user_id(_users_id)==_users_id)
-        {
-            v_notifications[i]->add_notification_2(_users_id,_notification);
-            return;
-        }
-    }
-    v_notifications.push_back(new notification(_users_id,_notification));
-            cout<<v_notifications.size()<<endl;
-
-    return;
-
-}
-
 void publisher::print_list_of_followers()
 {
     cout<<"List of Followers"<<endl;

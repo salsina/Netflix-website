@@ -258,5 +258,20 @@ void handle_input::get_films(film* f)
             cout << counter++ << ". " << recom[i]->return_id() << " | "<<recom[i]->return_name()<<" | "<<recom[i]->return_length()<<" | "<<recom[i]->return_director()<<endl;  
         }
     }
-    
+}
+
+user* handle_input::find_user_by_user_id(int _user_id)
+{
+    for(int i=0;i<v_users.size();i++)
+    {
+        if(v_users[i]->return_user_id()==_user_id)
+            return v_users[i];
+    }
+}
+
+
+void handle_input::send_notification_to_a_user(int _user_id,string _notification)
+{
+    user* _user=find_user_by_user_id(_user_id);
+    _user->pushback_v_notfs(_notification);
 }

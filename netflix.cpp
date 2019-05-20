@@ -405,7 +405,7 @@ void netflix::post_replies(map<string, string> info,handle_input* HandleInput)
     publisher *p = online_publisher(HandleInput);
     HandleInput->reply_comment(stoi(info.find("comment_id")->second),info.find("content")->second,f);
     string commentor = HandleInput->return_commentor(stoi(info.find("comment_id")->second), f);
-    p->send_notification_to_a_user(HandleInput->find_user_id_by_username(commentor),"Publisher "+p->return_username() +"with id "+to_string(p->return_user_id()) +"reply to your comment.");
+    HandleInput->send_notification_to_a_user(HandleInput->find_user_id_by_username(commentor),"Publisher "+p->return_username() +"with id "+to_string(p->return_user_id()) +"reply to your comment.");
 }
 
 void netflix::get_notifications_user(handle_input* HandleInput)
