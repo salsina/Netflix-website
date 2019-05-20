@@ -26,19 +26,7 @@ public:
     void print_notifications_unread();
     void print_notifications_read(int _limit);
     vector<notification*> return_v_notifications(){return v_notifications;}
-    void pushback_v_notfs(string _notification){ 
-    for(int i=0;v_notifications.size();i++)
-    {
-        if(v_notifications[i]->find_user_id(user_id)==user_id)
-        {
-            v_notifications[i]->add_notification_2(user_id,_notification);
-            return;
-        }
-    }
-    v_notifications.push_back(new notification(user_id,_notification));
-    return;
-
-    }
+    void pushback_v_notfs(string _notification);
 protected:
     string email;
     string username;

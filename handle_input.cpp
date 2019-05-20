@@ -267,6 +267,7 @@ user* handle_input::find_user_by_user_id(int _user_id)
         if(v_users[i]->return_user_id()==_user_id)
             return v_users[i];
     }
+    return nullptr;
 }
 
 

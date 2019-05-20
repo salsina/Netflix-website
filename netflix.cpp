@@ -219,8 +219,13 @@ void netflix::post_followers(map<string, string> info,handle_input* HandleInput)
         cout<<"Bad Request"<<endl;
         return;
     }
-
-    online->follow_publisher(info.find("user_id")->second);
+    user* _user=HandleInput->find_user_by_user_id(stoi(info.find("user_id")->second));
+    if(_user==nullptr)
+    {
+        cout<<"Not Found"<<endl;
+        return;
+    }
+    online->follow_publisher(_user->return_username());
     for(int i=0;i<HandleInput->return_v_publishers().size();i++)
     {         
         if(HandleInput->return_v_publishers()[i]->return_user_id()==stoi(info.find("user_id")->second))
@@ -405,7 +410,7 @@ void netflix::post_replies(map<string, string> info,handle_input* HandleInput)
     publisher *p = online_publisher(HandleInput);
     HandleInput->reply_comment(stoi(info.find("comment_id")->second),info.find("content")->second,f);
     string commentor = HandleInput->return_commentor(stoi(info.find("comment_id")->second), f);
-    HandleInput->send_notification_to_a_user(HandleInput->find_user_id_by_username(commentor),"Publisher "+p->return_username() +"with id "+to_string(p->return_user_id()) +"reply to your comment.");
+    HandleInput->send_notification_to_a_user(HandleInput->find_user_id_by_username(commentor),"Publisher "+p->return_username() +" with id "+to_string(p->return_user_id()) +" reply to your comment");
 }
 
 void netflix::get_notifications_user(handle_input* HandleInput)
@@ -518,174 +523,204 @@ void netflix::get_films(map<string, string> info,handle_input* HandleInput)
     HandleInput->get_films(f);    
 }
 
+void netflix::post_commands(){
+
+if(line[1]=="signup")
+{
+    if (line.size()==12 || line.size()==14)
+        signup(info,HandleInput);
+    else
+        cout<<"Bad Request"<<endl;
+}
+
+if(line[1]=="login")
+{
+    if(info.count("username")!=1 || info.count("password")!=1)
+    {
+        cout<<"Bad Request"<<endl;
+        return;
+    }
+    if(line.size()==8)
+        HandleInput->login(info.find("username")->second,info.find("password")->second);
+    else 
+        cout<<"Bad Request"<<endl;
+}
+
+if(line[1]=="films")
+{
+    if(line.size()==16)
+        post_films(info,HandleInput);
+    else 
+        cout<<"Bad Request"<<endl;
+}
+
+if(line[1]=="followers")
+{
+    if(line.size()==6)
+        post_followers(info,HandleInput);
+    else 
+        cout<<"Bad Request"<<endl;
+}
+if(line[1]=="money")
+{
+    if(info.count("?")==1)
+    {
+        if(line.size()==6)
+            post_money_user(info,HandleInput);
+        else 
+            cout<<"Bad Request"<<endl;
+    }
+    else if(info.count("?")==0)
+    {
+        if(line.size()==3)
+            post_money_publisher(HandleInput);
+        else 
+            cout<<"Bad Request"<<endl;
+    }
+}
+if(line[1]=="buy")
+{
+    if(line.size()==6)
+        post_buy(info,HandleInput);
+    else 
+        cout<<"Bad Request"<<endl;
+}
+if(line[1]=="rate")
+{
+    if(line.size()==8)
+        post_rate(info,HandleInput);
+    else 
+        cout<<"Bad Request"<<endl;
+}
+if(line[1]=="comments")
+{
+    if(line.size()==8)
+        post_comments(info,HandleInput);
+    else 
+        cout<<"Bad Request"<<endl;
+}
+if(line[1]=="replies")
+{
+    if(line.size()==10)
+        post_replies(info,HandleInput);
+    else 
+        cout<<"Bad Request"<<endl;
+}
+
+}
+
+void netflix::put_commands(){
+if(line[1]=="films")
+{
+    if(line.size()==6 ||line.size()==8 ||line.size()==10 ||line.size()==12 ||line.size()==14 ||line.size()==16)
+        put_films(info,HandleInput);
+    else 
+        cout<<"Bad Request"<<endl;
+}
+
+}
+
+void netflix::delete_commands(){
+if(line[1]=="films")
+{
+    if(line.size()==6)
+        delete_films(info,HandleInput);
+    else 
+        cout<<"Bad Request"<<endl;
+}
+
+if(line[1]=="comments")
+{
+    if(line.size()==8)
+        delete_comments(info,HandleInput);
+    else 
+        cout<<"Bad Request"<<endl;
+}
+
+}
+
+void netflix::get_commands(){
+    if(line[1]=="notifications")
+{
+    if(line.size()==3)
+        get_notifications_user(HandleInput);
+    else if(line.size()==7)
+        get_notifications_publisher(info,HandleInput);
+    else 
+        cout<<"Bad Request"<<endl;
+}
+
+if(line[1]=="followers")
+{
+    if(line.size()==3)
+        get_followers(HandleInput);
+    else 
+        cout<<"Bad Request"<<endl;
+}
+
+if(line[1]=="published")
+{
+    if(line.size()==3 || line.size()==4 || line.size()==6||line.size()==8 ||line.size()==10||line.size()==12||line.size()==14||line.size()==16)
+        get_published(info,HandleInput);
+    else 
+        cout<<"Bad Request"<<endl;
+}
+
+if(line[1]=="purchased")
+{
+    if(line.size()==3 || line.size()==4 || line.size()==6||line.size()==8 ||line.size()==10||line.size()==12||line.size()==14||line.size()==16)
+        get_purchased(info,HandleInput);
+    else 
+        cout<<"Bad Request"<<endl;
+}
+
+if(line[1]=="films")
+{
+    if(info.count("film_id")==0)
+    {
+        if(line.size()==3 || line.size()==4 || line.size()==6||line.size()==8 ||line.size()==10||line.size()==12||line.size()==14||line.size()==16)
+            get_films_filter(info,HandleInput);
+        else 
+            cout<<"Bad Request"<<endl;
+    }
+    else if(info.count("film_id")==1)
+    {
+        if(line.size()==6)
+            get_films(info,HandleInput);
+        else 
+            cout<<"Bad Request"<<endl;
+    }
+}
+}
+
+
 void netflix::run(){
 
 while(getline(cin,str)) 
 {   
     line=removeDupWord(str);
     info=seperate_input(line);
-    if(line[0]=="POST" )
+    if(str.size()!=0)
     {
-        if(line[1]=="signup")
+        if(line[0]=="POST" )
         {
-            if (line.size()==12 || line.size()==14)
-                signup(info,HandleInput);
-            else
-                cout<<"Bad Request"<<endl;
+            post_commands();
+        } 
+        else if(line[0]=="PUT")
+        {
+            put_commands();
         }
 
-        if(line[1]=="login")
+        else if(line[0]=="DELETE")
         {
-            if(line.size()==8)
-                HandleInput->login(info.find("username")->second,info.find("password")->second);
-            else 
-                cout<<"Bad Request"<<endl;
+            delete_commands();
         }
-
-        if(line[1]=="films")
-        {
-            if(line.size()==16)
-                post_films(info,HandleInput);
-            else 
-                cout<<"Bad Request"<<endl;
+        else if(line[0]=="GET")
+        {    
+            get_commands();
         }
-
-        if(line[1]=="followers")
-        {
-            if(line.size()==6)
-                post_followers(info,HandleInput);
-            else 
-                cout<<"Bad Request"<<endl;
-        }
-        if(line[1]=="money")
-        {
-            if(info.count("?")==1)
-            {
-                if(line.size()==6)
-                    post_money_user(info,HandleInput);
-                else 
-                    cout<<"Bad Request"<<endl;
-            }
-            else if(info.count("?")==0)
-            {
-                if(line.size()==3)
-                    post_money_publisher(HandleInput);
-                else 
-                    cout<<"Bad Request"<<endl;
-            }
-        }
-        if(line[1]=="buy")
-        {
-            if(line.size()==6)
-                post_buy(info,HandleInput);
-            else 
-                cout<<"Bad Request"<<endl;
-        }
-        if(line[1]=="rate")
-        {
-            if(line.size()==8)
-                post_rate(info,HandleInput);
-            else 
-                cout<<"Bad Request"<<endl;
-        }
-        if(line[1]=="comments")
-        {
-            if(line.size()==8)
-                post_comments(info,HandleInput);
-            else 
-                cout<<"Bad Request"<<endl;
-        }
-        if(line[1]=="replies")
-        {
-            if(line.size()==10)
-                post_replies(info,HandleInput);
-            else 
-                cout<<"Bad Request"<<endl;
-        }
-    } 
-    if(line[0]=="PUT")
-    {
-        if(line[1]=="films")
-        {
-            if(line.size()==6 ||line.size()==8 ||line.size()==10 ||line.size()==12 ||line.size()==14 ||line.size()==16)
-                put_films(info,HandleInput);
-            else 
-                cout<<"Bad Request"<<endl;
-        }
+        else 
+            cout<<"Not Found"<<endl;
     }
-
-    if(line[0]=="DELETE")
-    {
-        if(line[1]=="films")
-        {
-            if(line.size()==6)
-                delete_films(info,HandleInput);
-            else 
-                cout<<"Bad Request"<<endl;
-        }
-
-        if(line[1]=="comments")
-        {
-            if(line.size()==8)
-                delete_comments(info,HandleInput);
-            else 
-                cout<<"Bad Request"<<endl;
-        }
-    }
-    if(line[0]=="GET")
-    {    
-        if(line[1]=="notifications")
-        {
-            if(line.size()==3)
-                get_notifications_user(HandleInput);
-            else if(line.size()==7)
-                get_notifications_publisher(info,HandleInput);
-            else 
-                cout<<"Bad Request"<<endl;
-        }
-
-        if(line[1]=="followers")
-        {
-            if(line.size()==3)
-                get_followers(HandleInput);
-            else 
-                cout<<"Bad Request"<<endl;
-        }
-
-        if(line[1]=="published")
-        {
-            if(line.size()==3 || line.size()==4 || line.size()==6||line.size()==8 ||line.size()==10||line.size()==12||line.size()==14||line.size()==16)
-                get_published(info,HandleInput);
-            else 
-                cout<<"Bad Request"<<endl;
-        }
-
-        if(line[1]=="purchased")
-        {
-            if(line.size()==3 || line.size()==4 || line.size()==6||line.size()==8 ||line.size()==10||line.size()==12||line.size()==14||line.size()==16)
-                get_purchased(info,HandleInput);
-            else 
-                cout<<"Bad Request"<<endl;
-        }
-
-        if(line[1]=="films")
-        {
-            if(info.count("film_id")==0)
-            {
-                if(line.size()==3 || line.size()==4 || line.size()==6||line.size()==8 ||line.size()==10||line.size()==12||line.size()==14||line.size()==16)
-                    get_films_filter(info,HandleInput);
-                else 
-                    cout<<"Bad Request"<<endl;
-            }
-            else if(info.count("film_id")==1)
-            {
-                if(line.size()==6)
-                    get_films(info,HandleInput);
-                else 
-                    cout<<"Bad Request"<<endl;
-            }
-        }
-    }
-}  
-
+}
 }

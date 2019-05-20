@@ -39,6 +39,10 @@ public:
     void get_films_filter(map<string, string> info,handle_input* HandleInput);
     void get_films(map<string, string> info,handle_input* HandleInput);
     void get_followers(handle_input* HandleInput);
+    void post_commands();
+    void put_commands();
+    void delete_commands();
+    void get_commands();
     void run();
     
 private:
