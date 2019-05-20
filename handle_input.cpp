@@ -236,7 +236,6 @@ void handle_input::get_films(film* f)
     cout<<endl;
     cout<<"Recommendation Film"<<endl;
     cout<<"#. Film Id | Film Name | Film Length | Film Director"<<endl;
-
     vector<film*> recom = v_films;
     sort(recom.begin(), recom.end(), [](film*a, film *b){
         return a->return_rate() > b->return_rate();
@@ -245,18 +244,14 @@ void handle_input::get_films(film* f)
     if(recom.size()<4)
     {
         for(int i = 0; i < recom.size(); i++)
-        {
             if(recom[i]->return_deleted_status()!="YES" && recom[i]->return_id()!=f->return_id())
-            cout << counter++ << ". " << recom[i]->return_id() << " | "<<recom[i]->return_name()<<" | "<<recom[i]->return_length()<<" | "<<recom[i]->return_director()<<endl;  
-        }
+                cout << counter++ << ". " << recom[i]->return_id() << " | "<<recom[i]->return_name()<<" | "<<recom[i]->return_length()<<" | "<<recom[i]->return_director()<<endl;  
     }
     else
     {
         for(int i = 0; i < 4; i++)
-        {
             if(recom[i]->return_deleted_status()!="YES" && recom[i]->return_id()!=f->return_id())
-            cout << counter++ << ". " << recom[i]->return_id() << " | "<<recom[i]->return_name()<<" | "<<recom[i]->return_length()<<" | "<<recom[i]->return_director()<<endl;  
-        }
+                cout << counter++ << ". " << recom[i]->return_id() << " | "<<recom[i]->return_name()<<" | "<<recom[i]->return_length()<<" | "<<recom[i]->return_director()<<endl;  
     }
 }
 
@@ -275,4 +270,13 @@ void handle_input::send_notification_to_a_user(int _user_id,string _notification
 {
     user* _user=find_user_by_user_id(_user_id);
     _user->pushback_v_notfs(_notification);
+}
+
+int handle_input::find_user_id_by_username(string username)
+{
+    for(int i = 0; i < v_users.size(); i++)
+    {
+        if(v_users[i]->return_username() == username)
+            return v_users[i]->return_user_id();
+    }
 }

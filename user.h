@@ -9,24 +9,24 @@ using namespace std;
 class user{
 public:
     user(int _user_id,string _email,string _username,string _password,string _age,string _publisher,int _loginstatus);
+    string return_username();
+    string return_password();
+    vector<notification*> return_v_notifications();
+    string return_publisher();
+    string return_email();
+    int return_login_status();
+    int return_user_id();
+    int return_money();
+    bool isOnline();
     void manage_login_status(int _loginstatus);
-    string return_username(){return username;}
-    string return_password(){return password;}
-    int return_login_status(){return login_status;}
-    string return_publisher(){return publisher;}
     void follow_publisher(string publisher_name);
     void add_money(int amount);
-    // film* find_film(string _film_id);
-    int return_user_id(){return user_id;}
-    string return_email(){return email;}
-    void makeOffline(){ online = false; }
-    void makeOnline(){ online = true; }      
-    bool isOnline(){ return online; }
-    int return_money(){return money;}
+    void makeOffline();
+    void makeOnline();    
     void print_notifications_unread();
     void print_notifications_read(int _limit);
-    vector<notification*> return_v_notifications(){return v_notifications;}
     void pushback_v_notfs(string _notification);
+
 protected:
     string email;
     string username;

@@ -13,6 +13,17 @@ user::user(int _user_id,string _email,string _username,string _password,string _
     age=_age;
     login_status=_loginstatus;
 }
+string user::return_username(){return username;}
+string user::return_password(){return password;}
+vector<notification*> user::return_v_notifications(){return v_notifications;}
+string user::return_publisher(){return publisher;}
+string user::return_email(){return email;}
+int user::return_login_status(){return login_status;}
+int user::return_user_id(){return user_id;}
+int user::return_money(){return money;}
+bool user::isOnline(){ return online; }
+void user::makeOffline(){ online = false; }
+void user::makeOnline(){ online = true; }      
 
 void user::manage_login_status(int _loginstatus)
 {

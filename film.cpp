@@ -14,6 +14,21 @@ film::film(int _id,string _publisher,string _name,string _year,string _length,st
     summary=_summary;
     director=_director;
 }
+string film::return_name(){return name;}
+string film::return_year(){return year;}
+string film::return_length(){return length;}
+string film::return_summary(){return summary;}
+string film::return_director(){return director;}
+string film::return_publisher(){return publisher;}
+string film::return_deleted_status(){return deleted;}
+string film::return_price(){return price;}
+vector<comment*> film::return_comments(){ return cmnts; }
+vector<string> film::return_buyers(){return buyers;}
+vector<int> film::return_v_rates(){return rates;}
+int film::return_id(){return id;}
+float film::return_rate(){return film_rate;}
+
+
 void film::edit_info(string _name,string _year,string _length,string _summary,string _director)
 {
     name=_name;

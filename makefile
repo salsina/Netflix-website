@@ -24,5 +24,5 @@ comment.o : comment.cpp comment.h reply.h
 reply.o : reply.cpp reply.h
 	g++ -c reply.cpp -o reply.o
 
-netflix.o : netflix.cpp netflix.h user.h publisher.h handle_input.h
+netflix.o : netflix.cpp netflix.h handle_input.h
 	g++ -c netflix.cpp -o netflix.o
