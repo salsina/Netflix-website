@@ -87,6 +87,7 @@ void handle_input::add_rate(string _film_id,int _rate,user* user,int &done)
 {   
     for(int i=0;i<find_film(_film_id)->return_buyers().size();i++)
         if(find_film(_film_id)->return_buyers()[i]==user->return_username())
+        {
             if(_rate>=0 && _rate<=10)
             {
                 find_film(_film_id)->change_film_rate(_rate);
@@ -94,6 +95,7 @@ void handle_input::add_rate(string _film_id,int _rate,user* user,int &done)
                 done=1;
                 return;
             }
+        }
     cout<<"Permission Denied"<<endl;
     done=0;
     return;

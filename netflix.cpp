@@ -648,6 +648,8 @@ void netflix::put_commands()
 {
     if(line[1]=="films")
         put_film_command();
+    else
+        cout<<"Not Found"<<endl;    
 }
 
 void netflix::delete_film_command()

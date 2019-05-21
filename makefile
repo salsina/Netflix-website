@@ -4,25 +4,34 @@ a.out : main.o user.o handle_input.o publisher.o film.o comment.o notification.o
 	g++ main.o user.o handle_input.o publisher.o film.o comment.o notification.o reply.o netflix.o -o a.out
 
 main.o: main.cpp netflix.h
-	g++ -c main.cpp -o main.o
+	g++ --std=c++11 -c main.cpp -o main.o
 
 user.o : user.cpp user.h film.h notification.h
-	g++ -c user.cpp -o user.o
+	g++ --std=c++11 -c user.cpp -o user.o
+
+notification.o: notification.h notification.cpp
+	g++ --std=c++11 -c notification.cpp -o notification.o
 
 handle_input.o : handle_input.cpp handle_input.h film.h
-	g++ -c handle_input.cpp -o handle_input.o
+	g++ --std=c++11 -c handle_input.cpp -o handle_input.o
 
 publisher.o : publisher.cpp publisher.h user.h film.h
-	g++ -c publisher.cpp -o publisher.o
+	g++ --std=c++11 -c publisher.cpp -o publisher.o
 
 film.o : film.cpp film.h comment.h
-	g++ -c film.cpp -o film.o
+	g++ --std=c++11 -c film.cpp -o film.o
 
 comment.o : comment.cpp comment.h reply.h
-	g++ -c comment.cpp -o comment.o
+	g++ --std=c++11 -c comment.cpp -o comment.o
 
 reply.o : reply.cpp reply.h
-	g++ -c reply.cpp -o reply.o
+	g++ --std=c++11 -c reply.cpp -o reply.o
 
 netflix.o : netflix.cpp netflix.h handle_input.h
-	g++ -c netflix.cpp -o netflix.o
+	g++ --std=c++11 -c netflix.cpp -o netflix.o
+
+.PHONY: clean
+
+clean:
+	rm *.o
+	rm *.out
