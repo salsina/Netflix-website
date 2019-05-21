@@ -220,7 +220,7 @@ void handle_input:: get_films_filter(vector<film*> v_films_save)
             cout<<counter++<<". "<<v_films_save[i]->return_id()<<" | "<<v_films_save[i]->return_name()<<" | "<<v_films_save[i]->return_length()<<" | "<<v_films_save[i]->return_price()<<" | "<<v_films_save[i]->return_rate()<<" | "<<v_films_save[i]->return_year()<<" | "<<v_films_save[i]->return_director()<<endl;
 }
 
-void handle_input::get_films(film* f)
+void handle_input::get_films(film* f,user* _user)
 {
     cout<<"Details of Film "<<f->return_name()<<endl;
     cout<<"Id = "<<f->return_id()<<endl;
@@ -241,6 +241,15 @@ void handle_input::get_films(film* f)
     cout<<"Recommendation Film"<<endl;
     cout<<"#. Film Id | Film Name | Film Length | Film Director"<<endl;
     vector<film*> recom = v_films;
+    for(int i=0;i<recom.size();i++)
+    {
+        for(int j=0;j<recom[i]->return_buyers().size();j++)
+            if(recom[i]->return_buyers()[j]==_user->return_username())
+            {
+                recom.erase(recom.begin()+i);
+                i--;
+            }
+    }
     sort(recom.begin(), recom.end(), [](film*a, film *b){
         return a->return_rate() > b->return_rate();
     });

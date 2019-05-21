@@ -12,7 +12,7 @@ vector<string> netflix::removeDupWord(string str)
       return res;
 } 
 
-map<string, string> netflix::seperate_input(vector<string> line)
+map<string, string> netflix::seperate_input()
 {
     map<string, string> temp_info;
     for(int i=0;i<line.size();i++)
@@ -74,21 +74,21 @@ map<string, string> netflix::seperate_input(vector<string> line)
     return temp_info;
 }
 
-bool netflix::does_exist(string user_name,handle_input* HandleInput)
+bool netflix::does_exist(string user_name)
 {
 for(int i=0;i<HandleInput->return_v_users().size();i++)
     if(HandleInput->return_v_users()[i]->return_username()==user_name)
         return true;
 }
 
-void netflix::signup(map<string, string> info, handle_input* HandleInput)
+void netflix::signup()
 {
     if(info.count("email")!=1||info.count("username")!=1||info.count("password")!=1||info.count("age")!=1)
     {
         cout<<"Bad Request"<<endl;
         return;
     }
-    if(info.count("@")==1 && info.count(".")==1 && !does_exist(info.find("username")->second,HandleInput))
+    if(info.count("@")==1 && info.count(".")==1 && !does_exist(info.find("username")->second))
     {
         if(info.count("publisher") == 1)
             HandleInput->signup(info.find("email")->second,info.find("username")->second,info.find("password")->second,info.find("age")->second,info.find("publisher")->second);
@@ -99,7 +99,7 @@ void netflix::signup(map<string, string> info, handle_input* HandleInput)
         cout<<"Bad Request"<<endl;                   
 }
 
-user* netflix::online_user(handle_input* HandleInput)
+user* netflix::online_user()
 {
     for(int i = 0; i < HandleInput->return_v_users().size(); i++){
         if(HandleInput->return_v_users()[i]->isOnline()){
@@ -109,7 +109,7 @@ user* netflix::online_user(handle_input* HandleInput)
     return nullptr;
 }
 
-publisher* netflix::online_publisher(handle_input* HandleInput)
+publisher* netflix::online_publisher()
 {
     vector<publisher*> p = HandleInput->return_v_publishers();
     for(int i = 0; i < p.size(); i++){
@@ -120,9 +120,9 @@ publisher* netflix::online_publisher(handle_input* HandleInput)
     return nullptr;               
 }
 
-void netflix::post_films(map<string, string> info,handle_input* HandleInput)
+void netflix::post_films()
 {
-    user *online = online_user(HandleInput);
+    user *online = online_user();
     if(online == nullptr){
         cout << "Permission Denied" << endl;
         return;
@@ -136,13 +136,13 @@ void netflix::post_films(map<string, string> info,handle_input* HandleInput)
         cout<<"Bad Request"<<endl;
         return;
     }
-    HandleInput->post_film(online_publisher(HandleInput)->return_username(),info.find("name")->second,info.find("year")->second,info.find("length")->second,info.find("price")->second,info.find("summary")->second,info.find("director")->second);
-    online_publisher(HandleInput)->send_notification_to_followers("Publisher "+ online_publisher(HandleInput)->return_username()+ " with id "+to_string(online_publisher(HandleInput)->return_user_id())+" register new film.");
+    HandleInput->post_film(online_publisher()->return_username(),info.find("name")->second,info.find("year")->second,info.find("length")->second,info.find("price")->second,info.find("summary")->second,info.find("director")->second);
+    online_publisher()->send_notification_to_followers("Publisher "+ online_publisher()->return_username()+ " with id "+to_string(online_publisher()->return_user_id())+" register new film.");
 }
 
-bool netflix::check_exceptions(map<string, string> info,handle_input* HandleInput)
+bool netflix::check_exceptions()
 {
-    user *online = online_user(HandleInput);
+    user *online = online_user();
     if(online == nullptr){
         cout << "Permission Denied" << endl;
         return true;
@@ -151,7 +151,7 @@ bool netflix::check_exceptions(map<string, string> info,handle_input* HandleInpu
         cout << "Permission Denied" << endl;
         return true;
     }
-    publisher *p = online_publisher(HandleInput);
+    publisher *p = online_publisher();
     string filmId = info.find("film_id")->second;
     film *f = HandleInput->find_film(filmId);
     if(f==nullptr)
@@ -167,7 +167,7 @@ bool netflix::check_exceptions(map<string, string> info,handle_input* HandleInpu
     return false;
 }
 
-void netflix::put_films(map<string, string> info,handle_input* HandleInput)
+void netflix::put_films()
 {
     if(info.count("film_id")!=1)
     {
@@ -176,9 +176,9 @@ void netflix::put_films(map<string, string> info,handle_input* HandleInput)
     }
     string filmId = info.find("film_id")->second;
     film *f = HandleInput->find_film(filmId);
-    publisher *p = online_publisher(HandleInput);
+    publisher *p = online_publisher();
 
-    if(check_exceptions(info,HandleInput))
+    if(check_exceptions())
         return;
 
     if(info.count("name") == 1)
@@ -194,9 +194,9 @@ void netflix::put_films(map<string, string> info,handle_input* HandleInput)
     cout << "OK" << endl;
 }
 
-void netflix::delete_films(map<string, string> info,handle_input* HandleInput)
+void netflix::delete_films()
 {
-    if(check_exceptions(info,HandleInput))
+    if(check_exceptions())
         return;
     if(info.count("film_id")!=1)
     {
@@ -207,9 +207,9 @@ void netflix::delete_films(map<string, string> info,handle_input* HandleInput)
     HandleInput->delete_film(info.find("film_id")->second);
 }
 
-void netflix::post_followers(map<string, string> info,handle_input* HandleInput)
+void netflix::post_followers()
 {
-    user *online = online_user(HandleInput);
+    user *online = online_user();
     if(online == nullptr){
         cout << "Bad Request" << endl;
         return;
@@ -243,9 +243,9 @@ void netflix::post_followers(map<string, string> info,handle_input* HandleInput)
     cout << "Permission Denied" << endl;
 }
 
-void netflix::get_followers(handle_input* HandleInput)
+void netflix::get_followers()
 {
-    user *online = online_user(HandleInput);
+    user *online = online_user();
     if(online == nullptr){
         cout << "Bad Request" << endl;
         return;
@@ -254,13 +254,13 @@ void netflix::get_followers(handle_input* HandleInput)
         cout << "Permission Denied" << endl;
         return;
     }
-    publisher *p = online_publisher(HandleInput);
+    publisher *p = online_publisher();
     p->print_list_of_followers();  
 }
 
-void netflix::post_money_user(map<string, string> info,handle_input* HandleInput)
+void netflix::post_money_user()
 {
-    user *online = online_user(HandleInput);
+    user *online = online_user();
     if(online == nullptr){
         cout << "Bad Request" << endl;
         return;
@@ -274,9 +274,9 @@ void netflix::post_money_user(map<string, string> info,handle_input* HandleInput
     online->add_money(stoi(info.find("amount")->second));
 }
 
-void netflix::post_money_publisher(handle_input* HandleInput)
+void netflix::post_money_publisher()
 {
-    user *online = online_user(HandleInput);
+    user *online = online_user();
     if(online == nullptr){
         cout << "Bad Request" << endl;
         return;
@@ -285,13 +285,13 @@ void netflix::post_money_publisher(handle_input* HandleInput)
         cout << "Permission Denied" << endl;
         return;
     }
-    publisher *p = online_publisher(HandleInput);
+    publisher *p = online_publisher();
     p->take_money();
 }
 
-void netflix::post_buy(map<string, string> info,handle_input* HandleInput)
+void netflix::post_buy()
 {      
-    user *online = online_user(HandleInput);
+    user *online = online_user();
     if(online == nullptr){
         cout << "Bad Request" << endl;
         return;
@@ -319,9 +319,9 @@ void netflix::post_buy(map<string, string> info,handle_input* HandleInput)
     }
 }
 
-void netflix::post_rate(map<string, string> info,handle_input* HandleInput)
+void netflix::post_rate()
 {
-    user *online = online_user(HandleInput);
+    user *online = online_user();
     if(online == nullptr){
         cout << "Bad Request" << endl;
         return;
@@ -348,9 +348,9 @@ void netflix::post_rate(map<string, string> info,handle_input* HandleInput)
             HandleInput->return_v_publishers()[i]->add_notification("User "+online->return_username()+" with id "+to_string(online->return_user_id())+" rate your film "+f->return_name()+" with id "+to_string(f->return_id()));
 }
 
-void netflix::post_comments(map<string, string> info,handle_input* HandleInput)
+void netflix::post_comments()
 {        
-    user *online = online_user(HandleInput);
+    user *online = online_user();
     if(online == nullptr){
         cout << "Bad Request" << endl;
         return;
@@ -377,9 +377,9 @@ void netflix::post_comments(map<string, string> info,handle_input* HandleInput)
             HandleInput->return_v_publishers()[i]->add_notification("User "+online->return_username()+" with id "+to_string(online->return_user_id())+" comment on your film "+f->return_name()+" with id "+to_string(f->return_id()));
 }
 
-void netflix::delete_comments(map<string, string> info,handle_input* HandleInput)
+void netflix::delete_comments()
 {
-    if(check_exceptions(info,HandleInput))
+    if(check_exceptions())
         return;
     if(info.count("film_id")!=1||info.count("comment_id")!=1)
     {
@@ -387,16 +387,16 @@ void netflix::delete_comments(map<string, string> info,handle_input* HandleInput
         return;
     }
 
-    user *online = online_user(HandleInput);
+    user *online = online_user();
     string filmId = info.find("film_id")->second;
     film *f = HandleInput->find_film(filmId);
 
     HandleInput->delete_comment(stoi(info.find("comment_id")->second),f);
 }
 
-void netflix::post_replies(map<string, string> info,handle_input* HandleInput)
+void netflix::post_replies()
 {
-    if(check_exceptions(info,HandleInput))
+    if(check_exceptions())
         return;
     if(info.count("film_id")!=1||info.count("comment_id")!=1||info.count("content")!=1)
     {
@@ -404,10 +404,10 @@ void netflix::post_replies(map<string, string> info,handle_input* HandleInput)
         return;
     }
 
-    user *online = online_user(HandleInput);
+    user *online = online_user();
     string filmId = info.find("film_id")->second;
     film *f = HandleInput->find_film(filmId);
-    publisher *p = online_publisher(HandleInput);
+    publisher *p = online_publisher();
     int done=0;
     HandleInput->reply_comment(stoi(info.find("comment_id")->second),info.find("content")->second,f,done);
     if(done==0)
@@ -416,9 +416,9 @@ void netflix::post_replies(map<string, string> info,handle_input* HandleInput)
     HandleInput->send_notification_to_a_user(HandleInput->find_user_id_by_username(commentor),"Publisher "+p->return_username() +" with id "+to_string(p->return_user_id()) +" reply to your comment");
 }
 
-void netflix::get_notifications_user(handle_input* HandleInput)
+void netflix::get_notifications_user()
 {
-    user *online = online_user(HandleInput);
+    user *online = online_user();
     if(online == nullptr){
         cout << "Bad Request" << endl;
         return;
@@ -426,9 +426,9 @@ void netflix::get_notifications_user(handle_input* HandleInput)
     online->print_notifications_unread();
 }
 
-void netflix::get_notifications_publisher(map<string, string> info,handle_input* HandleInput)
+void netflix::get_notifications_publisher()
 {
-    user *online = online_user(HandleInput);
+    user *online = online_user();
     if(online == nullptr){
         cout << "Bad Request" << endl;
         return;
@@ -442,7 +442,7 @@ void netflix::get_notifications_publisher(map<string, string> info,handle_input*
     online->print_notifications_read(stoi(info.find("limit")->second));
 }
 
-vector<film*> netflix::search_v_films(map<string, string> info,handle_input* HandleInput)
+vector<film*> netflix::search_v_films()
 {
     vector<film*> v_films_save=HandleInput->return_v_films();
     if(info.count("name")==1)
@@ -461,9 +461,9 @@ vector<film*> netflix::search_v_films(map<string, string> info,handle_input* Han
     return v_films_save;
 }
 
-void netflix::get_published(map<string, string> info,handle_input* HandleInput)
+void netflix::get_published()
 {
-    user *online = online_user(HandleInput);
+    user *online = online_user();
     if(online == nullptr){
         cout << "Bad Request" << endl;
         return;
@@ -472,39 +472,39 @@ void netflix::get_published(map<string, string> info,handle_input* HandleInput)
         cout << "Permission Denied" << endl;
         return;
     }
-    publisher *p = online_publisher(HandleInput);
-    vector<film*> v_films_save=search_v_films(info,HandleInput);
+    publisher *p = online_publisher();
+    vector<film*> v_films_save=search_v_films();
     HandleInput->get_published(v_films_save,p);
     
 }
 
-void netflix::get_purchased(map<string, string> info,handle_input* HandleInput)
+void netflix::get_purchased()
 {
-    user *online = online_user(HandleInput);
+    user *online = online_user();
     if(online == nullptr){
         cout << "Bad Request" << endl;
         return;
     }
 
-    vector<film*> v_films_save=search_v_films(info,HandleInput);
+    vector<film*> v_films_save=search_v_films();
     HandleInput->get_purchased(v_films_save,online);
 }
 
-void netflix::get_films_filter(map<string, string> info,handle_input* HandleInput)
+void netflix::get_films_filter()
 {
-    user *online = online_user(HandleInput);
+    user *online = online_user();
     if(online == nullptr){
         cout << "Bad Request" << endl;
         return;
     }
 
-    vector<film*> v_films_save=search_v_films(info,HandleInput);
+    vector<film*> v_films_save=search_v_films();
     HandleInput->get_films_filter(v_films_save);
 }
 
-void netflix::get_films(map<string, string> info,handle_input* HandleInput)
+void netflix::get_films()
 {
-    user *online = online_user(HandleInput);
+    user *online = online_user();
     if(online == nullptr){
         cout << "Bad Request" << endl;
         return;
@@ -523,13 +523,13 @@ void netflix::get_films(map<string, string> info,handle_input* HandleInput)
         return;
     }         
 
-    HandleInput->get_films(f);    
+    HandleInput->get_films(f,online);    
 }
 
 void netflix::signup_command()
 {
     if (line.size()==12 || line.size()==14)
-        signup(info,HandleInput);
+        signup();
     else
         cout<<"Bad Request"<<endl;
 }
@@ -549,7 +549,7 @@ void netflix::login_command()
 void netflix::post_film_command()
 {
     if(line.size()==16)
-        post_films(info,HandleInput);
+        post_films();
     else 
         cout<<"Bad Request"<<endl;
 }
@@ -557,7 +557,7 @@ void netflix::post_film_command()
 void netflix::post_followers_command()
 {
     if(line.size()==6)
-        post_followers(info,HandleInput);
+        post_followers();
     else 
         cout<<"Bad Request"<<endl;
 }
@@ -567,14 +567,14 @@ void netflix::post_money_command()
     if(info.count("?")==1)
     {
         if(line.size()==6)
-            post_money_user(info,HandleInput);
+            post_money_user();
         else 
             cout<<"Bad Request"<<endl;
     }
     else if(info.count("?")==0)
     {
         if(line.size()==3)
-            post_money_publisher(HandleInput);
+            post_money_publisher();
         else 
             cout<<"Bad Request"<<endl;
     }
@@ -583,7 +583,7 @@ void netflix::post_money_command()
 void netflix::post_rate_command()
 {
     if(line.size()==8)
-        post_rate(info,HandleInput);
+        post_rate();
     else 
         cout<<"Bad Request"<<endl;
 }
@@ -591,7 +591,7 @@ void netflix::post_rate_command()
 void netflix::post_buy_command()
 {
     if(line.size()==6)
-        post_buy(info,HandleInput);
+        post_buy();
     else 
         cout<<"Bad Request"<<endl;
 }
@@ -599,7 +599,7 @@ void netflix::post_buy_command()
 void netflix::post_comment_command()
 {
     if(line.size()==8)
-        post_comments(info,HandleInput);
+        post_comments();
     else 
         cout<<"Bad Request"<<endl;
 }
@@ -607,7 +607,7 @@ void netflix::post_comment_command()
 void netflix::post_reply_command()
 {
     if(line.size()==10)
-        post_replies(info,HandleInput);
+        post_replies();
     else 
         cout<<"Bad Request"<<endl;
 }
@@ -639,7 +639,7 @@ void netflix::post_commands()
 void netflix::put_film_command()
 {
     if(line.size()==6 ||line.size()==8 ||line.size()==10 ||line.size()==12 ||line.size()==14 ||line.size()==16)
-        put_films(info,HandleInput);
+        put_films();
     else 
         cout<<"Bad Request"<<endl;
 }
@@ -655,7 +655,7 @@ void netflix::put_commands()
 void netflix::delete_film_command()
 {
     if(line.size()==6)
-        delete_films(info,HandleInput);
+        delete_films();
     else 
         cout<<"Bad Request"<<endl;
 }
@@ -663,7 +663,7 @@ void netflix::delete_film_command()
 void netflix::delete_comment_command()
 {
     if(line.size()==8)
-        delete_comments(info,HandleInput);
+        delete_comments();
     else 
         cout<<"Bad Request"<<endl;
 }
@@ -672,16 +672,18 @@ void netflix::delete_commands()
 {
     if(line[1]=="films")
         delete_film_command();
-    if(line[1]=="comments")
+    else if(line[1]=="comments")
         delete_comment_command();
+    else
+        cout<<"Not Found"<<endl;    
 }
 
 void netflix::get_notification_command()
 {
     if(line.size()==3)
-        get_notifications_user(HandleInput);
+        get_notifications_user();
     else if(line.size()==7)
-        get_notifications_publisher(info,HandleInput);
+        get_notifications_publisher();
     else 
         cout<<"Bad Request"<<endl;
 }
@@ -689,7 +691,7 @@ void netflix::get_notification_command()
 void netflix::get_followers_command()
 {
     if(line.size()==3)
-        get_followers(HandleInput);
+        get_followers();
     else 
         cout<<"Bad Request"<<endl;
 }
@@ -697,7 +699,7 @@ void netflix::get_followers_command()
 void netflix::get_published_command()
 {
     if(line.size()==3 || line.size()==4 || line.size()==6||line.size()==8 ||line.size()==10||line.size()==12||line.size()==14||line.size()==16)
-        get_published(info,HandleInput);
+        get_published();
     else 
         cout<<"Bad Request"<<endl;
 }
@@ -705,7 +707,7 @@ void netflix::get_published_command()
 void netflix::get_purchased_command()
 {
     if(line.size()==3 || line.size()==4 || line.size()==6||line.size()==8 ||line.size()==10||line.size()==12||line.size()==14||line.size()==16)
-        get_purchased(info,HandleInput);
+        get_purchased();
     else 
         cout<<"Bad Request"<<endl;
 }
@@ -715,14 +717,14 @@ void netflix::get_film_command()
     if(info.count("film_id")==0)
     {
         if(line.size()==3 || line.size()==4 || line.size()==6||line.size()==8 ||line.size()==10||line.size()==12||line.size()==14||line.size()==16)
-            get_films_filter(info,HandleInput);
+            get_films_filter();
         else 
             cout<<"Bad Request"<<endl;
     }
     else if(info.count("film_id")==1)
     {
         if(line.size()==6)
-            get_films(info,HandleInput);
+            get_films();
         else 
             cout<<"Bad Request"<<endl;
     }
@@ -752,7 +754,7 @@ void netflix::run()
     while(getline(cin,str)) 
     {   
         line=removeDupWord(str);
-        info=seperate_input(line);
+        info=seperate_input();
         if(str.size()!=0)
         {
             if(line[0]=="POST" )

@@ -35,7 +35,7 @@ public:
     void get_published(vector<film*> v_films_save,publisher* publisher);
     void get_purchased(vector<film*> v_films_save,user* user);
     void get_films_filter(vector<film*> v_films_save);
-    void get_films(film* film);
+    void get_films(film* film,user* _user);
     void send_notification_to_a_user(int _user_id,string _notification);
 
 private:
